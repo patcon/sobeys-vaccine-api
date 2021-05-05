@@ -1,0 +1,750 @@
+swagger: "2.0"
+info:
+  description: |
+    This is an example. Instructions to contribute:
+      * Edit the file [in the Swagger editor](https://editor.swagger.io/?url=https://pad.publiclab.org/p/sobeys-vaccine-api/export/txt)
+      * When no errors, copy into [open notepad](https://pad.publiclab.org/p/sobeys-vaccine-api)
+      * When spec stabilizes, considering bringing into GitHub repo.
+  version: "1.0.0"
+  title: "Sobeys Vaccine API"
+  termsOfService: "http://swagger.io/terms/"
+  contact:
+    email: "apiteam@swagger.io"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+host: "api.pharmacyappointments.ca"
+basePath: "/public"
+schemes:
+- "https"
+paths:
+  /eligibility:
+    post:
+      tags:
+      - "real"
+      summary: "Determine eligibility for vaccination"
+      description: ""
+      operationId: "eligibility"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Pet object that needs to be added to the store"
+        required: true
+        schema:
+          type: object
+          properties:
+            eligibilityQuestionResponse:
+              type: array
+              items:
+                $ref: "#/definitions/EligibilityQuestion"
+            url:
+              type: string
+              example: https://www.pharmacyappointments.ca/screening
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            items:
+              $ref: "#/definitions/SearchResponse"
+        "400":
+          description: "Invalid body json"
+      security: []
+  /locations/search:
+    post:
+      tags:
+      - "real"
+      summary: "Search for vaccine locations"
+      description: ""
+      operationId: "search"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Pet object that needs to be added to the store"
+        required: true
+        schema:
+          $ref: "#/definitions/SearchRequest"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            items:
+              $ref: "#/definitions/SearchResponse"
+        "400":
+          description: "Invalid body json"
+      security: 
+      - requestedWithHeader: []
+  /locations/{locationId}/availability:
+    post:
+      tags:
+      - "real"
+      summary: "Get availability at specific location"
+      description: ""
+      operationId: "getAvailability"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: path
+        name: locationId
+        required: true
+        type: string
+        default: a2t5o00000001GXAAY
+      - in: "body"
+        name: "body"
+        description: "Pet object that needs to be added to the store"
+        required: true
+        schema:
+          $ref: "#/definitions/SearchRequest"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            items:
+              $ref: "#/definitions/AvailabilityResponse"
+        "400":
+          description: "Invalid body json"
+      security: []
+  /locations/{locationId}/date/{date}/slots:
+    post:
+      tags:
+      - "real"
+      summary: "Get appointment slots for a specific location and date"
+      description: ""
+      operationId: "getSlots"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: path
+        name: locationId
+        required: true
+        type: string
+      - in: path
+        name: date
+        required: true
+        type: string
+        format: date
+      - in: "body"
+        name: "body"
+        description: "Pet object that needs to be added to the store"
+        required: true
+        schema:
+          $ref: "#/definitions/SlotsRequest"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            items:
+              $ref: "#/definitions/SlotsResponse"
+        "400":
+          description: "Invalid body json"
+      security: []
+  /locations/{locationId}/date/{date}/slots/reserve:
+    post:
+      tags:
+      - "real"
+      summary: "Reserve an appointment slot for a specific location and date"
+      description: ""
+      operationId: "reserveSlot"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: path
+        name: locationId
+        required: true
+        type: string
+      - in: path
+        name: date
+        required: true
+        type: string
+        format: date
+      - in: "body"
+        name: "body"
+        description: "Pet object that needs to be added to the store"
+        required: true
+        schema:
+          $ref: "#/definitions/ReserveRequest"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            items:
+              $ref: "#/definitions/ReserveResponse"
+        "400":
+          description: "Invalid body json"
+      security: []
+  /appointments:
+    post:
+      tags:
+      - "real"
+      summary: "Book an appointment slot for a specific location and date"
+      description: ""
+      operationId: "bookAppointment"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Pet object that needs to be added to the store"
+        required: true
+        schema:
+          $ref: "#/definitions/AppointmentRequest"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            items:
+              $ref: "#/definitions/AppointmentResponse"
+        "400":
+          description: "Invalid body json"
+      security: []
+  /appointments/get:
+    post:
+      tags:
+      - "real"
+      summary: "Find appointment details"
+      description: "One of `email` or `phone` are required with `confirmationCode`."
+      operationId: "findAppointment"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: ""
+        required: true
+        schema:
+          $ref: "#/definitions/FindAppointmentRequest"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            items:
+              $ref: "#/definitions/FindAppointmentResponse"
+        "400":
+          description: "Invalid body json"
+      security: []
+  /appointments/cancel:
+    delete:
+      tags:
+      - "real"
+      summary: "Cancel appointment"
+      description: "One of `email` or `phone` are required with `confirmationCode`."
+      operationId: "cancelAppointment"
+      consumes:
+      - "application/json"
+      produces:
+      - "text/plain"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: ""
+        required: true
+        schema:
+          $ref: "#/definitions/CancelAppointmentRequest"
+      responses:
+        "200":
+          description: OK
+      security: []
+  /config:
+    post:
+      tags:
+      - "real"
+      summary: "Reserve an appointment slot for a specific location and date"
+      description: ""
+      operationId: "config"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: ""
+        required: true
+        schema:
+          type: object
+          properties:
+            url:
+              type: string
+              example: https://www.pharmacyappointments.ca/manage
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            items:
+              $ref: "#/definitions/ConfigResponse"
+        "400":
+          description: "Invalid body json"
+      security: []
+securityDefinitions:
+  requestedWithHeader:
+    type: apiKey
+    in: header
+    name: X-Requested-With
+definitions:
+  SearchRequest:
+    type: "object"
+    properties:
+      doseNumber:
+        type: integer
+        default: 1
+      fromDate:
+        type: string
+        format: date
+      location:
+        $ref: "#/definitions/LatLng"
+      locationQuery:
+        $ref: "#/definitions/LocationQuery"
+      url:
+        type: "string"
+        format: "uri"
+        default: https://www.pharmacyappointments.ca/location-select
+      vaccineData:
+        $ref: "#/definitions/VaccineData"
+  SearchResponse:
+    type: "object"
+    properties:
+      eligible:
+        type: boolean
+        default: true
+      locations:
+        type: array
+        items:
+          $ref: "#/definitions/Location"
+      vaccineData:
+        allOf:
+        - $ref: "#/definitions/VaccineData"
+        - example: |-
+            WyJhM3A1bzAwMDAwMDAwVzVBQUkiLCJhM3A1bzAwMDAwMDAwV1dBQVkiLCJhM3A1bzAwMDAwMDAwZjRBQUEiLCJhM3A1bzAwMDAwMDAwZk9BQVEiLCJhM3A1bzAwMDAwMDAwZllBQVEiLCJhM3A1bzAwMDAwMDAwZ2xBQUEiLCJhM3A1bzAwMDAwMDAwbnJBQUEiLCJhM3A1bzAwMDAwMDAwVzdBQUkiLCJhM3A1bzAwMDAwMDAwVzJBQUkiLCJhM3A1bzAwMDAwMDAwVzNBQUkiLCJhM3A1bzAwMDAwMDAwZkpBQVEiXQ==
+  AvailabilityResponse:
+    type: object
+    properties:
+      availability:
+        items:
+          $ref: "#/definitions/Availability"
+      locationExtId:
+        type: string
+        example: a2t5o00000001GXAAY
+      vaccineData:
+        $ref: "#/definitions/VaccineData"
+  SlotsRequest:
+    type: object
+    properties:
+      url:
+        type: string
+        format: uri
+        example: https://www.pharmacyappointments.ca/appointment-select
+      vaccineData:
+        $ref: "#/definitions/VaccineData"
+  SlotsResponse:
+    type: object
+    properties:
+      slotsWithAvailability:
+        items:
+          $ref: "#/definitions/Slot"
+      locationExtId:
+        type: string
+        example: a2t5o00000001GXAAY
+      vaccineData:
+        $ref: "#/definitions/VaccineData"
+  ReserveRequest:
+    type: object
+    properties:
+      date:
+        type: string
+        format: date
+      dose:
+        type: integer
+        example: 1
+      localStartTime:
+        type: string
+        example: "10:00:00"
+      locationExtId:
+        type: string
+        example: a2t5o00000001GXAAY
+      sessionId:
+        type: string
+        example: "4c29e0eb-2d0a-4391-a0d7-f3c35ba89d02"
+      url:
+        type: string
+        format: uri
+        example: https://www.pharmacyappointments.ca/appointment-select
+      vaccineData:
+        $ref: "#/definitions/VaccineData"
+  ReserveResponse:
+    type: object
+    properties:
+      expiry:
+        type: string
+        format: date-time
+      reservationId:
+        type: string
+        format: uuid
+        example: "f022fb71-f93a-4dd7-9df9-acb95a01bb83"
+      vaccineData:
+        $ref: "#/definitions/VaccineData"
+      vaccineDetails:
+        $ref: "#/definitions/VaccineDetails"
+  AppointmentRequest:
+    type: object
+    properties:
+      additionalQuestionsResponse:
+        type: array
+        items:
+          type: string
+      eligibilityQuestionsResponse:
+        type: array
+        items:
+          $ref: "#/definitions/EligibilityQuestion"
+      locale:
+        type: string
+        enum:
+        - en_CA
+        - fr_CA
+      personalDetails:
+        type: array
+        items:
+          type: object
+      reservationIds:
+        type: array
+        items:
+          type: string
+          format: uuid
+          example: "f022fb71-f93a-4dd7-9df9-acb95a01bb8"
+      url:
+        default: https://www.pharmacyappointments.ca/personal-details
+  AppointmentResponse:
+    type: object
+    properties:
+      additionalText: {}
+      confirmationCode:
+        $ref: "#/definitions/ConfirmationCode"
+      confirmationEmail:
+        $ref: "#/definitions/Email"
+      personalDetails:
+        type: array
+        items:
+          type: string
+  FindAppointmentRequest:
+    type: object
+    properties:
+      confirmationCode:
+        $ref: "#/definitions/ConfirmationCode"
+      phone:
+        type: string
+        format: phone
+        example: +14165555555
+      email:
+        $ref: "#/definitions/Email"
+      url:
+        type: string
+        default: https://www.pharmacyappointments.ca/manage
+  FindAppointmentResponse:
+    type: object
+    properties:
+      bookingId: {}
+      cancelStatus:
+        type: string
+        enum:
+        - FINE
+      cancellationLockMins:
+        type: integer
+        default: 120
+      cancelledAt: {}
+      configName:
+        type: string
+        example: Sobeys Registration
+      confirmationCode:
+        $ref: "#/definitions/ConfirmationCode"
+      createdAt:
+        type: string
+        format: date-time
+      doseNumber:
+        type: integer
+        example: 1
+      durationMinutes:
+        type: integer
+        example: 30
+      id:
+        type: integer
+        example: 116679
+      internalId:
+        type: string
+        format: uuid
+        example: "0d3c4292-8ef4-4e85-b243-2c060e5dbc37"
+      location:
+        $ref: "#/definitions/Location"
+      locationOpenDates:
+        type: object
+        properties:
+          startDate:
+            type: string
+            format: date
+            example: 2021-04-06
+          endDate:
+            type: string
+            format: date
+            example: 2021-05-13
+      start:
+        type: string
+        format: date-time
+      vaccineData:
+        $ref: "#/definitions/VaccineData"
+      vaccineDetails:
+        $ref: "#/definitions/VaccineDetails"
+      vaccineId:
+        type: string
+        example: a3p5o00000000W5AAI
+  CancelAppointmentRequest:
+    type: object
+    properties:
+      confirmationCode:
+        $ref: "#/definitions/ConfirmationCode"
+      doseNumber:
+        type: array
+        items:
+          type: integer
+          default: 1
+      phone:
+        type: string
+        format: phone
+        example: +14165555555
+      email:
+        $ref: "#/definitions/Email"
+      url:
+        type: string
+        default: https://www.pharmacyappointments.ca/manage/appointments
+  CancelAppointmentResponse: {}
+  ConfigResponse:
+    type: object
+    description: WIP
+    properties:
+      abortReasons:
+        type: array
+        items:
+          type: string
+      additionalConfirmationFields:
+        type: array
+        items:
+          type: string
+      additionalQuestions:
+        type: array
+        items:
+          type: string
+      companyDetails:
+        type: object
+      eligibilityQuestions:
+        type: array
+        items:
+          $ref: "#/definitions/EligibilityQuestion"
+      forceSingleBooking:
+        type: boolean
+        default: true
+      frontendRescheduleEnable:
+        type: boolean
+        default: false
+      groupThirdPartyLocationResults:
+        type: boolean
+        default: false
+      i18n: {}
+      identityCheck:
+        type: boolean
+        default: false
+      ineligibilityRegister: {}
+      landingPage: {}
+      lockAllDosesToSameLocation:
+        type: boolean
+        default: false
+      multipleBookingWorkflow:
+        type: boolean
+        default: true
+      onlyShowRegisterWhenNoAllTypeLocations:
+        type: boolean
+        default: false
+      personalDetails: {}
+      preventDuplicateBookings:
+        type: boolean
+        default: false
+      qrCodeDestinationUrl: {}
+      redirectToLocationSearch:
+        type: boolean
+        default: false
+  Location:
+    type: "object"
+    properties:
+      displayAddress:
+        type: "string"
+        example: "1430 Major MacKenzie Drive East, Unit A,Richmond Hill,Ontario,L4S 1P5"
+      distanceInMeters:
+        type: number
+        format: double
+        example: 26478.33919424
+      endDate:
+        type: "string"
+        format: "date"
+      extId:
+        type: "string"
+        example: a2t5o00000001GiAAI
+      location:
+        $ref: "#/definitions/LatLng"
+      name:
+        type: "string"
+        example: FreshCo Leslie & Major MacKenzie
+      openHours:
+        type: array
+        items:
+          $ref: "#/definitions/OpenHours"
+      regionExternalId:
+        type: "string"
+        example: a2z5o000000015AAAQ
+      startDate:
+        type: "string"
+        format: "date"
+      timezone:
+        type: string
+        example: Canada/Eastern
+      type:
+        type: "string"
+        enum:
+          - OnlineBooking
+      vaccineData:
+        $ref: "#/definitions/VaccineData"
+  LatLng:
+    type: "object"
+    properties:
+      lat:
+        type: number
+        format: double
+        example: 43.64262420000001
+      lng:
+        type: number
+        format: double
+        example: -79.40822899999999
+  OpenHours:
+    type: object
+    properties:
+      days:
+        type: array
+        items:
+          type: string
+          enum:
+          - mon
+          - tue
+          - wed
+          - thu
+          - fri
+          - sat
+          - sun
+      localStart:
+        type: string
+        example: "10:00:00"
+      localEnd:
+        type: string
+        example: "17:30:00"
+  LocationQuery:
+    type: object
+    properties:
+      includePools:
+        items:
+          type: string
+          enum:
+          - default
+  Slot:
+    type: object
+    properties:
+      appointmentsTaken:
+        type: integer
+        example: 0
+      durationSeconds:
+        type: integer
+        example: 1800
+      localStartTime:
+        type: string
+        example: "18:30:00"
+      reservationsTaken:
+        type: integer
+        example: 0
+  Availability:
+    type: object
+    properties:
+      available:
+        type: boolean
+        example: true
+      date:
+        type: string
+        format: date
+      vaccineData:
+        $ref: "#/definitions/VaccineData"
+  EligibilityQuestion:
+    type: object
+    properties:
+      id:
+        type: string
+        enum:
+        - q.screening.province
+        - q.screening.alberta.province
+        - q.screening.british.columbia.province
+        - q.screening.manitoba.province
+        - q.screening.new.brunswick.province
+        - q.screening.ontario.province
+        - q.screening.prince.edward.island.province
+        - q.screening.saskatchewan.province
+        - q.screening.product.or.manufacturer.name
+        - q.screening.was.the.first.dose.taken.more.than.112.
+        - q.screening.alberta.moderna.second.dose
+        - q.screening.ontario.product
+        - q.screening.prince.edward.island.moderna.second.dose
+        - q.screening.prince.edward.island.astrazeneca.second
+        - q.screening.accessibility.code
+      type:
+        type: string
+        enum:
+        - single-select
+      values:
+        type: string
+        example: Yes
+  ConfirmationCode:
+    type: string
+    example: nasqmixxxx
+  Email:
+    type: string
+    format: email
+    example: janedoe@example.com
+  VaccineData:
+    type: string
+    description: Base64-encoded array of vaccineId(s)
+    example: WyJhM3A1bzAwMDAwMDAwVzVBQUkiXQ==
+  VaccineDetails:
+    type: object
+    properties:
+      daysBetweenDoses:
+        type: object
+        properties:
+          min:
+            type: integer
+            default: 84
+          max:
+            type: integer
+            default: 112
+      doses:
+        type: integer
+        default: 2
+externalDocs:
+  description: "Find out more about Swagger"
+  url: "http://swagger.io"
