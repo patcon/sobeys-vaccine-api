@@ -53,6 +53,46 @@ paths:
         "400":
           description: "Invalid body json"
       security: []
+  /locations:
+    post:
+      tags:
+      - "real"
+      summary: "Get Details on specific locations"
+      description: ""
+      operationId: "getLocations"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          type: object
+          properties:
+            doseNumber:
+              type: integer
+              default: 1
+            locationIds:
+              items:
+                type: string
+                example: a2t5o00000001GXAAY
+            asAtDate:
+              type: string
+              format: date
+            vaccineData:
+              $ref: "#/definitions/VaccineData"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            items:
+              $ref: "#/definitions/SearchResponse"
+        "400":
+          description: "Invalid body json"
+      security: 
+      - requestedWithHeader: []
   /locations/search:
     post:
       tags:
