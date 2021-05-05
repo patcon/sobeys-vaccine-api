@@ -52,7 +52,8 @@ paths:
               $ref: "#/definitions/SearchResponse"
         "400":
           description: "Invalid body json"
-      security: []
+      security:
+      - requestedWithHeader: []
   /locations:
     post:
       tags:
@@ -152,7 +153,8 @@ paths:
               $ref: "#/definitions/AvailabilityResponse"
         "400":
           description: "Invalid body json"
-      security: []
+      security:
+      - requestedWithHeader: []
   /locations/{locationId}/date/{date}/slots:
     post:
       tags:
@@ -188,7 +190,8 @@ paths:
               $ref: "#/definitions/SlotsResponse"
         "400":
           description: "Invalid body json"
-      security: []
+      security:
+      - requestedWithHeader: []
   /locations/{locationId}/date/{date}/slots/reserve:
     post:
       tags:
@@ -224,7 +227,8 @@ paths:
               $ref: "#/definitions/ReserveResponse"
         "400":
           description: "Invalid body json"
-      security: []
+      security:
+      - requestedWithHeader: []
   /appointments:
     post:
       tags:
@@ -251,7 +255,8 @@ paths:
               $ref: "#/definitions/AppointmentResponse"
         "400":
           description: "Invalid body json"
-      security: []
+      security:
+      - requestedWithHeader: []
   /appointments/get:
     post:
       tags:
@@ -278,7 +283,8 @@ paths:
               $ref: "#/definitions/FindAppointmentResponse"
         "400":
           description: "Invalid body json"
-      security: []
+      security:
+      - requestedWithHeader: []
   /appointments/cancel:
     delete:
       tags:
@@ -300,7 +306,8 @@ paths:
       responses:
         "200":
           description: OK
-      security: []
+      security:
+      - requestedWithHeader: []
   /config:
     post:
       tags:
@@ -331,7 +338,8 @@ paths:
               $ref: "#/definitions/ConfigResponse"
         "400":
           description: "Invalid body json"
-      security: []
+      security:
+      - requestedWithHeader: []
 securityDefinitions:
   requestedWithHeader:
     type: apiKey
