@@ -658,7 +658,12 @@ definitions:
         format: "date"
       timezone:
         type: string
-        example: Canada/Eastern
+        enum:
+        - Canada/Eastern
+        - Canada/Atlantic
+        - Canada/Central
+        - Canada/Mountain
+        - Canada/Pacific
       type:
         type: "string"
         enum:
