@@ -1,18 +1,10 @@
 swagger: "2.0"
 info:
   description: |
-    This is an example. Instructions to contribute:
-      * Edit the file [in the Swagger editor](https://editor.swagger.io/?url=https://pad.publiclab.org/p/sobeys-vaccine-api/export/txt)
-      * When no errors, copy into [open notepad](https://pad.publiclab.org/p/sobeys-vaccine-api)
-      * When spec stabilizes, considering bringing into GitHub repo.
+    - Click authorize and enter any value in the field.
+    - Execute API calls in-browser. They will fail (due to CORS), but you can copy the cURL command to run locally.
   version: "1.0.0"
   title: "Sobeys Vaccine API"
-  termsOfService: "http://swagger.io/terms/"
-  contact:
-    email: "apiteam@swagger.io"
-  license:
-    name: "Apache 2.0"
-    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
 host: "api.pharmacyappointments.ca"
 basePath: "/public"
 schemes:
@@ -799,5 +791,5 @@ definitions:
         type: integer
         default: 2
 externalDocs:
-  description: "Find out more about Swagger"
-  url: "http://swagger.io"
+  description: "Find more civic vaccine projects"
+  url: "http://bit.ly/vax-app"
